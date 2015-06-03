@@ -272,3 +272,11 @@ class RedisBackend(KeyValueStoreBackend):
     @deprecated_property(3.2, 3.3)
     def password(self):
         return self.connparams['password']
+
+class RedisSSLBackend(RedisBackend):
+    import redis.connection
+    """Redis (SSL) task result store."""
+    def __init__(self, **kwargs):
+        # update the kwargs with the SSL connection class
+        kwargs.update({ connection_pool:redis.connection.SSLConnection })
+        super(RedisSSLBackend, self).__init__(**kwargs)
