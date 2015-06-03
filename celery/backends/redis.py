@@ -278,5 +278,5 @@ class RedisSSLBackend(RedisBackend):
     """Redis (SSL) task result store."""
     def __init__(self, **kwargs):
         # update the kwargs with the SSL connection class
-        kwargs.update({ connection_pool:redis.connection.SSLConnection })
+        kwargs.update({ "connection_pool":redis.connection.SSLConnection })
         super(RedisSSLBackend, self).__init__(**kwargs)
