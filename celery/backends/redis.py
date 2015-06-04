@@ -124,6 +124,8 @@ class RedisBackend(KeyValueStoreBackend):
             connparams.pop('port', None)
         else:
             connparams['db'] = path
+        if scheme == 'rediss':
+            connparams.update({'connection_class': self.redis.SSLConnection})
 
         # db may be string and start with / like in kombu.
         db = connparams.get('db') or 0
@@ -272,11 +274,3 @@ class RedisBackend(KeyValueStoreBackend):
     @deprecated_property(3.2, 3.3)
     def password(self):
         return self.connparams['password']
-
-class RedisSSLBackend(RedisBackend):
-    import redis.connection
-    """Redis (SSL) task result store."""
-    def __init__(self, **kwargs):
-        # update the kwargs with the SSL connection class
-        kwargs.update({ "connection_pool":redis.connection.SSLConnection })
-        super(RedisSSLBackend, self).__init__(**kwargs)
